@@ -18,6 +18,7 @@
 package com.amazonaws.youruserpools;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -36,6 +37,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Switch;
@@ -135,6 +137,7 @@ public class UserActivity extends AppCompatActivity {
     String keystorePath;
     String keystoreName;
     String keystorePassword;
+    ImageView presence_state;
 
     KeyStore clientKeyStore = null;
     String certificateId;
@@ -192,6 +195,7 @@ public class UserActivity extends AppCompatActivity {
 //        btnDisconnect = (Button) findViewById(R.id.btnDisconnect);
 //        btnDisconnect.setOnClickListener(disconnectClick);
 
+        presence_state = (ImageView)findViewById(R.id.presence_state);
         demoSwitch = (Switch) findViewById(R.id.demo_switch);
         demoSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -352,52 +356,6 @@ public class UserActivity extends AppCompatActivity {
             Log.e(LOG_TAG, "Subscription error.", e);
         }
     }
-    View.OnClickListener connectClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-            Log.d(LOG_TAG, "clientId = " + clientId);
-
-            try {
-                mqttManager.connect(clientKeyStore, new AWSIotMqttClientStatusCallback() {
-                    @Override
-                    public void onStatusChanged(final AWSIotMqttClientStatus status,
-                                                final Throwable throwable) {
-                        Log.d(LOG_TAG, "Status = " + String.valueOf(status));
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (status == AWSIotMqttClientStatus.Connecting) {
-                                    tvStatus.setText("Connecting...");
-
-                                } else if (status == AWSIotMqttClientStatus.Connected) {
-                                    tvStatus.setText("Connected");
-
-                                } else if (status == AWSIotMqttClientStatus.Reconnecting) {
-                                    if (throwable != null) {
-                                        Log.e(LOG_TAG, "Connection error.", throwable);
-                                    }
-                                    tvStatus.setText("Reconnecting");
-                                } else if (status == AWSIotMqttClientStatus.ConnectionLost) {
-                                    if (throwable != null) {
-                                        Log.e(LOG_TAG, "Connection error.", throwable);
-                                    }
-                                    tvStatus.setText("Disconnected");
-                                } else {
-                                    tvStatus.setText("Disconnected");
-
-                                }
-                            }
-                        });
-                    }
-                });
-            } catch (final Exception e) {
-                Log.e(LOG_TAG, "Connection error.", e);
-                tvStatus.setText("Error! " + e.getMessage());
-            }
-        }
-    };
 
     private void connect(){
         try {
@@ -411,26 +369,23 @@ public class UserActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             if (status == AWSIotMqttClientStatus.Connecting) {
-//                                tvStatus.setText("Connecting...");
+                                presence_state.setImageResource(android.R.drawable.presence_away);
 
                             } else if (status == AWSIotMqttClientStatus.Connected) {
-//                                tvStatus.setText("Connected");
-                                SubscribeToTopic("test/mos1");
-//                                PublishToTopic("aa","{gpio: {pin: 2, state: 0}}");
+                                presence_state.setImageResource(android.R.drawable.presence_online);
 
                             } else if (status == AWSIotMqttClientStatus.Reconnecting) {
                                 if (throwable != null) {
                                     Log.e(LOG_TAG, "Connection error.", throwable);
                                 }
-//                                tvStatus.setText("Reconnecting");
+                                presence_state.setImageResource(android.R.drawable.presence_invisible);
                             } else if (status == AWSIotMqttClientStatus.ConnectionLost) {
                                 if (throwable != null) {
                                     Log.e(LOG_TAG, "Connection error.", throwable);
                                 }
-//                                tvStatus.setText("Disconnected");
+                                presence_state.setImageResource(android.R.drawable.presence_offline);
                             } else {
-//                                tvStatus.setText("Disconnected");
-
+                                presence_state.setImageResource(android.R.drawable.presence_offline);
                             }
                         }
                     });
@@ -438,7 +393,11 @@ public class UserActivity extends AppCompatActivity {
             });
         } catch (final Exception e) {
             Log.e(LOG_TAG, "Connection error.", e);
-//            tvStatus.setText("Error! " + e.getMessage());
+            Context context = getApplicationContext();
+            CharSequence text = "Failed to connect to server";
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
         }
     }
     private void PublishToTopic(String topic, String matter){
@@ -529,13 +488,18 @@ public class UserActivity extends AppCompatActivity {
         if(menuItem == R.id.user_update_attribute) {
             //updateAllAttributes();
             showWaitDialog("Updating...");
-            getDetails();
+            updateSwitches();
+//            getDetails();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void updateSwitches(){
+        connect();
+
+    }
     @Override
     public void onBackPressed() {
         exit();
