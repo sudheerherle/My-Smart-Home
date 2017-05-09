@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi\\applogo.png",
+        "source": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\src\\main\\res\\mipmap-mdpi\\applogo.png"
+    },
+    {
+        "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi\\ic_visibility_black.png",
+        "source": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\src\\main\\res\\mipmap-mdpi\\ic_visibility_black.png"
+    },
+    {
+        "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi\\ic_launcher.png",
+        "source": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi\\cognito.png",
+        "source": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\src\\main\\res\\mipmap-mdpi\\cognito.png"
+    },
+    {
+        "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi\\ic_visibility_off_black.png",
+        "source": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\src\\main\\res\\mipmap-mdpi\\ic_visibility_off_black.png"
+    }
+]
