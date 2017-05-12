@@ -84,12 +84,12 @@
         "source": "C:\\Users\\i14746\\.android\\build-cache\\2f6d80b3a0d0e9d8e9ebbfe1562e2decf9cb2d91\\output\\res\\drawable\\abc_list_selector_background_transition_holo_dark.xml"
     },
     {
-        "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\checked.png",
-        "source": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\src\\main\\res\\drawable\\checked.png"
-    },
-    {
         "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_default_mtrl_shape.xml",
         "source": "C:\\Users\\i14746\\.android\\build-cache\\2f6d80b3a0d0e9d8e9ebbfe1562e2decf9cb2d91\\output\\res\\drawable\\abc_btn_default_mtrl_shape.xml"
+    },
+    {
+        "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\checked.png",
+        "source": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\src\\main\\res\\drawable\\checked.png"
     },
     {
         "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\design_fab_background.xml",
@@ -168,12 +168,12 @@
         "source": "C:\\Users\\i14746\\.android\\build-cache\\2f6d80b3a0d0e9d8e9ebbfe1562e2decf9cb2d91\\output\\res\\drawable\\abc_tab_indicator_material.xml"
     },
     {
-        "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\button_selected.xml",
-        "source": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\src\\main\\res\\drawable\\button_selected.xml"
-    },
-    {
         "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\text_border_selected.xml",
         "source": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\src\\main\\res\\drawable\\text_border_selected.xml"
+    },
+    {
+        "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\button_selected.xml",
+        "source": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\src\\main\\res\\drawable\\button_selected.xml"
     },
     {
         "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\eye.png",

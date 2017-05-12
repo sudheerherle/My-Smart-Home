@@ -52,16 +52,16 @@
         "source": "C:\\Users\\i14746\\.android\\build-cache\\2f6d80b3a0d0e9d8e9ebbfe1562e2decf9cb2d91\\output\\res\\layout\\notification_template_big_media_narrow.xml"
     },
     {
+        "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_sign_up_confirm.xml",
+        "source": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\src\\main\\res\\layout\\activity_sign_up_confirm.xml"
+    },
+    {
         "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_big_media.xml",
         "source": "C:\\Users\\i14746\\.android\\build-cache\\2f6d80b3a0d0e9d8e9ebbfe1562e2decf9cb2d91\\output\\res\\layout\\notification_template_big_media.xml"
     },
     {
         "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_search_view.xml",
         "source": "C:\\Users\\i14746\\.android\\build-cache\\2f6d80b3a0d0e9d8e9ebbfe1562e2decf9cb2d91\\output\\res\\layout\\abc_search_view.xml"
-    },
-    {
-        "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_sign_up_confirm.xml",
-        "source": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\src\\main\\res\\layout\\activity_sign_up_confirm.xml"
     },
     {
         "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_menu_item_layout.xml",

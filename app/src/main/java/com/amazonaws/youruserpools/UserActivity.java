@@ -68,6 +68,10 @@ import com.amazonaws.services.iot.model.CreateKeysAndCertificateRequest;
 import com.amazonaws.services.iot.model.CreateKeysAndCertificateResult;
 import com.amazonaws.youruserpools.CognitoYourUserPoolsDemo.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.security.KeyStore;
 import java.util.ArrayList;
@@ -167,52 +171,57 @@ public class UserActivity extends AppCompatActivity {
         setNavDrawer();
         init();
         initIoT();
+        subscribeStandard();
         View navigationHeader = nDrawer.getHeaderView(0);
         TextView navHeaderSubTitle = (TextView) navigationHeader.findViewById(R.id.textViewNavUserSub);
         navHeaderSubTitle.setText(username);
     }
 
+    CompoundButton.OnCheckedChangeListener checkedChangeListener = new CompoundButton.OnCheckedChangeListener() {
 
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView,
+        boolean isChecked) {
+
+            if(isChecked){
+                PublishToTopic("$aws/things/demo-switch/shadow/update",
+                        "{\"state\":\n" +
+                                "  {\n" +
+                                "  \"desired\":\n" +
+                                "    {\n" +
+                                "    \"pin\": \"2\",\n" +
+                                "    \"state\" : \"0\"\n" +
+                                "    }\n" +
+                                "  }\n" +
+                                "}");
+            }else{
+                PublishToTopic("$aws/things/demo-switch/shadow/update",
+                        "{\"state\":\n" +
+                                "  {\n" +
+                                "  \"desired\":\n" +
+                                "    {\n" +
+                                "    \"pin\": \"2\",\n" +
+                                "    \"state\" : \"1\"\n" +
+                                "    }\n" +
+                                "  }\n" +
+                                "}");
+            }
+
+        }
+    };
+//
+//    @Override
+//    public void onResume(){
+//        super.onResume();
+//        if(AWSIotMqttClientStatusCallback.AWSIotMqttClientStatus."Connected")
+//        initIoT();
+//    }
     public void initIoT(){
-//        txtSubcribe = (EditText) findViewById(R.id.txtSubcribe);
-//        txtTopic = (EditText) findViewById(R.id.txtTopic);
-//        txtMessage = (EditText) findViewById(R.id.txtMessage);
-//
-//        tvLastMessage = (TextView) findViewById(R.id.tvLastMessage);
-//        tvClientId = (TextView) findViewById(R.id.tvClientId);
-//        tvStatus = (TextView) findViewById(R.id.tvStatus);
-//
-//        btnConnect = (Button) findViewById(R.id.btnConnect);
-//        btnConnect.setOnClickListener(connectClick);
-//        btnConnect.setEnabled(false);
-//
-//        btnSubscribe = (Button) findViewById(R.id.btnSubscribe);
-//        btnSubscribe.setOnClickListener(subscribeClick);
-//
-//        btnPublish = (Button) findViewById(R.id.btnPublish);
-//        btnPublish.setOnClickListener(publishClick);
-//
-//        btnDisconnect = (Button) findViewById(R.id.btnDisconnect);
-//        btnDisconnect.setOnClickListener(disconnectClick);
-
         presence_state = (ImageView)findViewById(R.id.presence_state);
         demoSwitch = (Switch) findViewById(R.id.demo_switch);
-        demoSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        demoSwitch.setOnCheckedChangeListener(checkedChangeListener);
 
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView,
-                                         boolean isChecked) {
-
-                if(isChecked){
-                    PublishToTopic("aa","{gpio: {pin: 2, state: 0}}");
-                }else{
-                    PublishToTopic("aa","{gpio: {pin: 2, state: 1}}");
-                }
-
-            }
-        });
-
-        clientId = UUID.randomUUID().toString();
+        clientId = username+"*"+UUID.randomUUID().toString().substring(0,5);
         // Initialize the AWS Cognito credentials provider
         credentialsProvider = new CognitoCachingCredentialsProvider(
                 getApplicationContext(), // context
@@ -343,10 +352,31 @@ public class UserActivity extends AppCompatActivity {
                                         Log.d(LOG_TAG, "   Topic: " + topic);
                                         Log.d(LOG_TAG, " Message: " + message);
 
-//                                        tvLastMessage.setText(message);
+                                        if(topic.equals("$aws/things/demo-switch/shadow/get/accepted")
+                                                || topic.equals("$aws/things/demo-switch/shadow/update/accepted")){
+                                            Log.d(LOG_TAG, " Message: " + message);
+                                            JSONObject result = new JSONObject(message);
+                                            JSONObject state = result.getJSONObject("state");
+                                            JSONObject desired = state.getJSONObject("desired");
+
+                                            String pin = desired.getString("pin");
+                                            String state_of_pin = desired.getString("state");
+                                            if(pin.equals("2") && state_of_pin.equals("0")){
+                                                demoSwitch.setOnCheckedChangeListener(null);
+                                                demoSwitch.setChecked(true);
+                                                demoSwitch.setOnCheckedChangeListener(checkedChangeListener);
+                                            }else{
+                                                demoSwitch.setOnCheckedChangeListener(null);
+                                                demoSwitch.setChecked(false);
+                                                demoSwitch.setOnCheckedChangeListener(checkedChangeListener);
+                                            }
+
+                                        }
 
                                     } catch (UnsupportedEncodingException e) {
                                         Log.e(LOG_TAG, "Message encoding error.", e);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
                                 }
                             });
@@ -373,6 +403,7 @@ public class UserActivity extends AppCompatActivity {
 
                             } else if (status == AWSIotMqttClientStatus.Connected) {
                                 presence_state.setImageResource(android.R.drawable.presence_online);
+                                subscribeStandard();
 
                             } else if (status == AWSIotMqttClientStatus.Reconnecting) {
                                 if (throwable != null) {
@@ -486,10 +517,9 @@ public class UserActivity extends AppCompatActivity {
 
         // Do the task
         if(menuItem == R.id.user_update_attribute) {
-            //updateAllAttributes();
             showWaitDialog("Updating...");
             updateSwitches();
-//            getDetails();
+            closeWaitDialog();
             return true;
         }
 
@@ -498,7 +528,13 @@ public class UserActivity extends AppCompatActivity {
 
     private void updateSwitches(){
         connect();
+        subscribeStandard();
+    }
 
+    private void subscribeStandard(){
+        SubscribeToTopic("$aws/things/demo-switch/shadow/get/accepted");
+        SubscribeToTopic("$aws/things/demo-switch/shadow/update/accepted");
+        PublishToTopic("$aws/things/demo-switch/shadow/get","");
     }
     @Override
     public void onBackPressed() {
