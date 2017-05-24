@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="D:\Extra\aws-sdk-android-samples-master\aws-sdk-android-samples-master\MySmartHome\app\src\main\jniLibs"/></dataSet><dataSet config="debug"><source path="D:\Extra\aws-sdk-android-samples-master\aws-sdk-android-samples-master\MySmartHome\app\src\debug\jniLibs"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="D:\Extra\GitHub\MySmartHome\app\src\main\jniLibs"/></dataSet><dataSet config="debug"><source path="D:\Extra\GitHub\MySmartHome\app\src\debug\jniLibs"/></dataSet></merger>

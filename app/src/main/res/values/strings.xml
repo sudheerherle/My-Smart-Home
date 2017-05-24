@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">My Smart Home</string>
     <string name="app_main_screen">Sign in</string>
-    <string name="app_main_screen_title">Cognito Identity</string>
-    <string name="app_main_desc">A sample app to showcase Cognito Identity and the SDK for Android.</string>
+    <string name="app_main_screen_title">My Smart Home</string>
+    <string name="app_main_desc">An app to view and control the electrical switches at home.</string>
     <string name="nav_drawer_open">Open navigation drawer</string>
     <string name="nav_drawer_close">Close navigation drawer</string>
     <string name="title_activity_user">UserActivity</string>

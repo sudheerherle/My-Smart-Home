@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-w820dp-v13\\values-w820dp-v13.xml",
+        "outputFile": "D:\\Extra\\GitHub\\MySmartHome\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-w820dp-v13\\values-w820dp-v13.xml",
         "map": [
             {
                 "to": {
@@ -11,7 +11,7 @@
                     "endOffset": 108
                 },
                 "from": {
-                    "file": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\src\\main\\res\\values-w820dp\\dimens.xml",
+                    "file": "D:\\Extra\\GitHub\\MySmartHome\\app\\src\\main\\res\\values-w820dp\\dimens.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,

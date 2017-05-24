@@ -1,10 +1,10 @@
 [
     {
-        "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\color-v11\\abc_background_cache_hint_selector_material_dark.xml",
-        "source": "C:\\Users\\i14746\\.android\\build-cache\\2f6d80b3a0d0e9d8e9ebbfe1562e2decf9cb2d91\\output\\res\\color-v11\\abc_background_cache_hint_selector_material_dark.xml"
+        "merged": "D:\\Extra\\GitHub\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\color-v11\\abc_background_cache_hint_selector_material_light.xml",
+        "source": "C:\\Users\\i14746\\.android\\build-cache\\2f6d80b3a0d0e9d8e9ebbfe1562e2decf9cb2d91\\output\\res\\color-v11\\abc_background_cache_hint_selector_material_light.xml"
     },
     {
-        "merged": "D:\\Extra\\aws-sdk-android-samples-master\\aws-sdk-android-samples-master\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\color-v11\\abc_background_cache_hint_selector_material_light.xml",
-        "source": "C:\\Users\\i14746\\.android\\build-cache\\2f6d80b3a0d0e9d8e9ebbfe1562e2decf9cb2d91\\output\\res\\color-v11\\abc_background_cache_hint_selector_material_light.xml"
+        "merged": "D:\\Extra\\GitHub\\MySmartHome\\app\\build\\intermediates\\res\\merged\\debug\\color-v11\\abc_background_cache_hint_selector_material_dark.xml",
+        "source": "C:\\Users\\i14746\\.android\\build-cache\\2f6d80b3a0d0e9d8e9ebbfe1562e2decf9cb2d91\\output\\res\\color-v11\\abc_background_cache_hint_selector_material_dark.xml"
     }
 ]

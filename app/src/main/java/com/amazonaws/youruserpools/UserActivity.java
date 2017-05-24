@@ -28,6 +28,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -74,9 +75,12 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.security.KeyStore;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class UserActivity extends AppCompatActivity {
     private final String TAG="MainActivity";
@@ -145,7 +149,7 @@ public class UserActivity extends AppCompatActivity {
 
     KeyStore clientKeyStore = null;
     String certificateId;
-
+    String topic = "$aws/things/demo-switch/shadow/update";
     CognitoCachingCredentialsProvider credentialsProvider;
 
     @Override
@@ -171,7 +175,8 @@ public class UserActivity extends AppCompatActivity {
         setNavDrawer();
         init();
         initIoT();
-        subscribeStandard();
+        connect();
+//        subscribeStandard();
         View navigationHeader = nDrawer.getHeaderView(0);
         TextView navHeaderSubTitle = (TextView) navigationHeader.findViewById(R.id.textViewNavUserSub);
         navHeaderSubTitle.setText(username);
@@ -182,40 +187,11 @@ public class UserActivity extends AppCompatActivity {
         @Override
         public void onCheckedChanged(CompoundButton buttonView,
         boolean isChecked) {
-
-            if(isChecked){
-                PublishToTopic("$aws/things/demo-switch/shadow/update",
-                        "{\"state\":\n" +
-                                "  {\n" +
-                                "  \"desired\":\n" +
-                                "    {\n" +
-                                "    \"pin\": \"2\",\n" +
-                                "    \"state\" : \"0\"\n" +
-                                "    }\n" +
-                                "  }\n" +
-                                "}");
-            }else{
-                PublishToTopic("$aws/things/demo-switch/shadow/update",
-                        "{\"state\":\n" +
-                                "  {\n" +
-                                "  \"desired\":\n" +
-                                "    {\n" +
-                                "    \"pin\": \"2\",\n" +
-                                "    \"state\" : \"1\"\n" +
-                                "    }\n" +
-                                "  }\n" +
-                                "}");
-            }
-
+            String msg = String.format("{\"state\": { \"desired\":{\"motor\": %b}  }}",isChecked);
+            PublishToTopic(topic,msg);
         }
     };
-//
-//    @Override
-//    public void onResume(){
-//        super.onResume();
-//        if(AWSIotMqttClientStatusCallback.AWSIotMqttClientStatus."Connected")
-//        initIoT();
-//    }
+
     public void initIoT(){
         presence_state = (ImageView)findViewById(R.id.presence_state);
         demoSwitch = (Switch) findViewById(R.id.demo_switch);
@@ -333,7 +309,6 @@ public class UserActivity extends AppCompatActivity {
                 }
             }).start();
         }
-        connect();
 
     }
 
@@ -353,23 +328,34 @@ public class UserActivity extends AppCompatActivity {
                                         Log.d(LOG_TAG, " Message: " + message);
 
                                         if(topic.equals("$aws/things/demo-switch/shadow/get/accepted")
-                                                || topic.equals("$aws/things/demo-switch/shadow/update/accepted")){
+                                                || topic.equals("$aws/things/demo-switch/shadow/update/accepted")) {
                                             Log.d(LOG_TAG, " Message: " + message);
                                             JSONObject result = new JSONObject(message);
                                             JSONObject state = result.getJSONObject("state");
                                             JSONObject desired = state.getJSONObject("desired");
-
-                                            String pin = desired.getString("pin");
-                                            String state_of_pin = desired.getString("state");
-                                            if(pin.equals("2") && state_of_pin.equals("0")){
-                                                demoSwitch.setOnCheckedChangeListener(null);
-                                                demoSwitch.setChecked(true);
-                                                demoSwitch.setOnCheckedChangeListener(checkedChangeListener);
-                                            }else{
-                                                demoSwitch.setOnCheckedChangeListener(null);
-                                                demoSwitch.setChecked(false);
-                                                demoSwitch.setOnCheckedChangeListener(checkedChangeListener);
+                                            boolean motor = demoSwitch.isChecked();
+                                            if (desired.has("motor")) {
+                                                motor = desired.getBoolean("motor");
                                             }
+                                            if(result.has("metadata")){
+                                            JSONObject metadata = result.getJSONObject("metadata");
+                                            JSONObject desiredMetadata = metadata.getJSONObject("desired");
+                                            JSONObject desiredmotorMetadata = desiredMetadata.getJSONObject("motor");
+                                                long motorTimeStamp = 0;
+                                            if (desiredMetadata.has("motor")) {
+                                                motorTimeStamp = desiredmotorMetadata.getLong("timestamp");
+                                            }
+                                            if (motorTimeStamp != 0 && motorTimeStamp != -1) {
+                                                Date motor_desired_timestamp = new java.util.Date(motorTimeStamp);
+                                                String text = timeSince(motor_desired_timestamp);
+                                                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+                                                toast.show();
+                                            }
+                                        }
+                                            demoSwitch.setOnCheckedChangeListener(null);
+                                            demoSwitch.setChecked(motor);
+                                            demoSwitch.setOnCheckedChangeListener(checkedChangeListener);
+
 
                                         }
 
@@ -385,6 +371,48 @@ public class UserActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(LOG_TAG, "Subscription error.", e);
         }
+    }
+
+
+    private String timeSince(Date past) {
+        past.setTime(past.getTime()*1000);
+        String timeSince = "";
+        try
+        {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss");
+            Date now = new Date();
+            long seconds= TimeUnit.MILLISECONDS.toSeconds(now.getTime() - past.getTime());
+            long minutes=TimeUnit.MILLISECONDS.toMinutes(now.getTime() - past.getTime());
+            long hours=TimeUnit.MILLISECONDS.toHours(now.getTime() - past.getTime());
+            long days=TimeUnit.MILLISECONDS.toDays(now.getTime() - past.getTime());
+//
+//          System.out.println(TimeUnit.MILLISECONDS.toSeconds(now.getTime() - past.getTime()) + " milliseconds ago");
+//          System.out.println(TimeUnit.MILLISECONDS.toMinutes(now.getTime() - past.getTime()) + " minutes ago");
+//          System.out.println(TimeUnit.MILLISECONDS.toHours(now.getTime() - past.getTime()) + " hours ago");
+//          System.out.println(TimeUnit.MILLISECONDS.toDays(now.getTime() - past.getTime()) + " days ago");
+
+            if(seconds<60)
+            {
+                timeSince = (seconds+" seconds ago");
+            }
+            else if(minutes<60)
+            {
+                timeSince = (minutes+" minutes ago");
+            }
+            else if(hours<24)
+            {
+                timeSince = (hours+" hours ago");
+            }
+            else
+            {
+                timeSince = (days+" days ago");
+            }
+        }
+        catch (Exception j){
+            j.printStackTrace();
+        }
+        return timeSince;
+
     }
 
     private void connect(){
@@ -438,71 +466,7 @@ public class UserActivity extends AppCompatActivity {
             Log.e(LOG_TAG, "Publish error.", e);
         }
     }
-    View.OnClickListener subscribeClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
 
-            final String topic = txtSubcribe.getText().toString();
-
-            Log.d(LOG_TAG, "topic = " + topic);
-
-            try {
-                mqttManager.subscribeToTopic(topic, AWSIotMqttQos.QOS0,
-                        new AWSIotMqttNewMessageCallback() {
-                            @Override
-                            public void onMessageArrived(final String topic, final byte[] data) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            String message = new String(data, "UTF-8");
-                                            Log.d(LOG_TAG, "Message arrived:");
-                                            Log.d(LOG_TAG, "   Topic: " + topic);
-                                            Log.d(LOG_TAG, " Message: " + message);
-
-                                            tvLastMessage.setText(message);
-
-                                        } catch (UnsupportedEncodingException e) {
-                                            Log.e(LOG_TAG, "Message encoding error.", e);
-                                        }
-                                    }
-                                });
-                            }
-                        });
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "Subscription error.", e);
-            }
-        }
-    };
-
-    View.OnClickListener publishClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-            final String topic = txtTopic.getText().toString();
-            final String msg = txtMessage.getText().toString();
-
-            try {
-                mqttManager.publishString(msg, topic, AWSIotMqttQos.QOS0);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "Publish error.", e);
-            }
-
-        }
-    };
-
-    View.OnClickListener disconnectClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-            try {
-                mqttManager.disconnect();
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "Disconnect error.", e);
-            }
-
-        }
-    };
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -528,7 +492,7 @@ public class UserActivity extends AppCompatActivity {
 
     private void updateSwitches(){
         connect();
-        subscribeStandard();
+//        subscribeStandard();
     }
 
     private void subscribeStandard(){
@@ -538,7 +502,7 @@ public class UserActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        exit();
+        doExit();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -719,6 +683,9 @@ public class UserActivity extends AppCompatActivity {
     // Initialize this activity
     private void init() {
         // Get the user name
+        Helper helper = new Helper();
+//        boolean isPortOpen = helper.isPortOpen("ssl://a3ga5tu9j45csi.iot.ap-northeast-1.amazonaws.com:8883", 8883, 5000);
+//        isPortOpen = helper.isHostReachable("ssl://a3ga5tu9j45csi.iot.ap-northeast-1.amazonaws.com",8883, 5000);
         Bundle extras = getIntent().getExtras();
         username = AppHelper.getCurrUser();
         user = AppHelper.getPool().getUser(username);
@@ -940,5 +907,30 @@ public class UserActivity extends AppCompatActivity {
         intent.putExtra("name",username);
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+    private void doExit() {
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+                UserActivity.this);
+
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent();
+                if(username == null)
+                    username = "";
+                intent.putExtra("name",username);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
+
+        alertDialog.setNegativeButton("No", null);
+
+        alertDialog.setMessage("Do you want to sign out?");
+        alertDialog.setTitle(R.string.app_name);
+        alertDialog.show();
     }
 }

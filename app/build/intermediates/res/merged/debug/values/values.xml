@@ -407,9 +407,9 @@
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
     <string name="about">This is an app to control the electrical switches in my home \nfrom anywhere in the world.</string>
-    <string name="app_main_desc">A sample app to showcase Cognito Identity and the SDK for Android.</string>
+    <string name="app_main_desc">An app to view and control the electrical switches at home.</string>
     <string name="app_main_screen">Sign in</string>
-    <string name="app_main_screen_title">Cognito Identity</string>
+    <string name="app_main_screen_title">My Smart Home</string>
     <string name="app_name">My Smart Home</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="character_counter_pattern" translatable="false">%1$d / %2$d</string>

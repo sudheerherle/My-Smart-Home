@@ -26,13 +26,13 @@
     tools:context="com.amazonaws.youruserpools.MainActivity">
 
     <ImageView
+        android:id="@+id/imageViewAppMainCognitoIcon"
         android:layout_width="110dp"
         android:layout_height="110dp"
-        android:id="@+id/imageViewAppMainCognitoIcon"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/cognito"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        android:src="@mipmap/applogo" />
 
     <Space
         android:layout_width="match_parent"
